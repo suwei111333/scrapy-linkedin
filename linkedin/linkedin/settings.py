@@ -14,6 +14,7 @@ NEWSPIDER_MODULE = 'linkedin.spiders'
 
 DOWNLOADER_MIDDLEWARES = {
     'linkedin.middleware.CustomHttpProxyMiddleware': 543,
+    'linkedin.middleware.CustomUserAgentMiddleware': 545,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -21,6 +22,8 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable auto throttle
 AUTOTHROTTLE_ENABLED = True
+
+COOKIES_ENABLED = False
 
 # Set your own download folder
 DOWNLOAD_FILE_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "download_file")
