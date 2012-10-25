@@ -2,5 +2,5 @@
 download_file
 *.pyc
 
-*/.project
-*/.pydevproject
+linkedin/.project
+linkedin/.pydevproject
