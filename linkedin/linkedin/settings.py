@@ -5,6 +5,7 @@
 #
 #     http://doc.scrapy.org/topics/settings.html
 #
+import os
 
 BOT_NAME = 'linkedin'
 
@@ -22,6 +23,6 @@ DOWNLOADER_MIDDLEWARES = {
 AUTOTHROTTLE_ENABLED = True
 
 # Set your own download folder
-DOWNLOAD_FILE_FOLDER = '/Users/ChenWei/Documents/internet/com/github/scrapy-linkedin/linkedin/download_file'
+DOWNLOAD_FILE_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "download_file")
 
 
