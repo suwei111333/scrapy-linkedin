@@ -1,13 +1,12 @@
-<<<<<<< HEAD
-from scrapy.selector import HtmlXPathSelector
+from linkedin.items import LinkedinItem
+from os import path
+from scrapy import log
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.http import Request
-from scrapy import log
-from linkedin.items import LinkedinItem
-from os import path
-
+from scrapy.selector import HtmlXPathSelector
 import os
+
 
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
