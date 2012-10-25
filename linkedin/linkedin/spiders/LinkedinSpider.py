@@ -120,3 +120,5 @@ class LinkedinspiderSpider(CrawlSpider):
     def create_path_if_not_exist(self, filePath):
         if not path.exists(path.dirname(filePath)):
             os.makedirs(path.dirname(filePath))
+            
+    def get_profile_from_search_page(self, response):
