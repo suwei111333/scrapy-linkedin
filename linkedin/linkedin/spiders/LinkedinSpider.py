@@ -89,8 +89,9 @@ class LinkedinspiderSpider(CrawlSpider):
             fileName = response.url.split("/")[-1]
             fn = path.join(self.settings["DOWNLOAD_FILE_FOLDER"], str(level), fileName)
             self.create_path_if_not_exist(fn)
-            with open(fn, "w") as f:
-                f.write(response.body)
+            if not path.exists(fn):
+                with open(fn, "w") as f:
+                    f.write(response.body)
     
     def get_follow_links(self, level, hxs):
         if level in [1, 2, 3]:
@@ -101,5 +102,5 @@ class LinkedinspiderSpider(CrawlSpider):
             return []
 
     def create_path_if_not_exist(self, filePath):
-        if not path.exists(filePath):
-            os.makedirs(filePath)
+        if not path.exists(path.dirname(filePath)):
+            os.makedirs(path.dirname(filePath))

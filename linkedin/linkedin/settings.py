@@ -11,6 +11,10 @@ BOT_NAME = 'linkedin'
 SPIDER_MODULES = ['linkedin.spiders']
 NEWSPIDER_MODULE = 'linkedin.spiders'
 
+DOWNLOADER_MIDDLEWARES = {
+    'linkedin.middleware.CustomHttpProxyMiddleware': 543,
+}
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'linkedin (+http://www.yourdomain.com)'
 
