@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
@@ -115,8 +116,20 @@ class LinkedinspiderSpider(CrawlSpider):
             relative_urls = ["http://linkedin.com" + x for x in relative_urls]
             return relative_urls
         elif level == 4:
+            self.get_profile_from_search_page(hxs, 1)
             return []
 
     def create_path_if_not_exist(self, filePath):
         if not path.exists(path.dirname(filePath)):
             os.makedirs(path.dirname(filePath))
+            
+    def get_profile_from_search_page(self, hxs, page):        
+        start_page = int(hxs.select("//p[@class='page']/a/text()").extract()[0])
+        relative_urls = hxs.select("//ol[@id='result-set']/li/div/a/@href").extract()
+        relative_urls = ["http://linkedin.com" + x for x in relative_urls]
+        page_urls = hxs.select("//p[@class='page']/a/@href").extract();
+        if start_page + len(page_urls) - 1 > page:
+            relative_urls.extend(self.get_profile_from_search_page(hxs, page+1))
+        #debug
+        print(x for x in relative_urls)
+        return relative_urls
