@@ -1,12 +1,12 @@
-from linkedin.items import LinkedinItem
-from os import path
-from scrapy import log
+from scrapy.selector import HtmlXPathSelector
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.http import Request
-from scrapy.selector import HtmlXPathSelector
-import os
+from scrapy import log
+from linkedin.items import LinkedinItem
+from os import path
 
+import os
 
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
@@ -77,6 +77,8 @@ class LinkedinspiderSpider(CrawlSpider):
             return 3
         elif re.match(".+/pub/dir/.+", url):
             return 4
+        elif re.match(".+/search/._", url):
+            return 4
         elif re.match(".+/pub/.+", url):
             return 5
         return None
@@ -101,12 +103,12 @@ class LinkedinspiderSpider(CrawlSpider):
         generate unique linkedin id, now use the url
         """
         url = response.url
-        if level in [1, 2, 3]:
+        if level in [1,2,3]:
             return url.split("/")[-1]
         
-        find_index = url.find("linkedin.com/")
+        find_index = url.find("/pub/")
         if find_index >= 0:
-            return url[find_index + 13:].replace('/', '-') + ".html"
+            return url[find_index + 5:].replace('/', '-')
         return None
         
     def get_follow_links(self, level, hxs):
@@ -115,20 +117,21 @@ class LinkedinspiderSpider(CrawlSpider):
             relative_urls = ["http://linkedin.com" + x for x in relative_urls]
             return relative_urls
         elif level == 4:
-            self.get_profile_from_search_page(hxs, 1)
-            return []
+            relative_urls = self.get_profile_from_search_page(hxs)
+            relative_urls = ["http://linkedin.com" + x for x in relative_urls]
+            return relative_urls
 
     def create_path_if_not_exist(self, filePath):
         if not path.exists(path.dirname(filePath)):
             os.makedirs(path.dirname(filePath))
             
-    def get_profile_from_search_page(self, hxs, page):        
-        start_page = int(hxs.select("//p[@class='page']/a/text()").extract()[0])
+    def get_profile_from_search_page(self, hxs):                  
+        """
+        parse search page to get profile links
+        """
         relative_urls = hxs.select("//ol[@id='result-set']/li/div/a/@href").extract()
-        relative_urls = ["http://linkedin.com" + x for x in relative_urls]
-        page_urls = hxs.select("//p[@class='page']/a/@href").extract();
-        if start_page + len(page_urls) - 1 > page:
-            relative_urls.extend(self.get_profile_from_search_page(hxs, page+1))
-        #debug
-        print(x for x in relative_urls)
+        cur_page = hxs.select("//p[@class='page'/strong/text()").extract()[0]
+        if int(cur_page)==1:
+            page_urls = hxs.select("//p[@class='page']/a/@href").extract()
+            relative_urls.extent(page_urls);
         return relative_urls
