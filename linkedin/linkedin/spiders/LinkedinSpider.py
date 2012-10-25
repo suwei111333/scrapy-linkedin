@@ -101,12 +101,12 @@ class LinkedinspiderSpider(CrawlSpider):
         generate unique linkedin id, now use the url
         """
         url = response.url
-        if level in [1,2,3]:
+        if level in [1, 2, 3]:
             return url.split("/")[-1]
         
-        find_index = url.find("/pub/")
+        find_index = url.find("linkedin.com/")
         if find_index >= 0:
-            return url[find_index + 5:].replace('/', '-')
+            return url[find_index + 13:].replace('/', '-') + ".html"
         return None
         
     def get_follow_links(self, level, hxs):
