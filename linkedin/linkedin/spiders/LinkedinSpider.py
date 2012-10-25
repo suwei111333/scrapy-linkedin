@@ -86,13 +86,29 @@ class LinkedinspiderSpider(CrawlSpider):
         save the response to related folder
         """
         if level in [1, 2, 3, 4, 5]:
-            fileName = response.url.split("/")[-1]
+            fileName = self.get_clean_file_name(level, response)
+            if fileName is None:
+                return
+            
             fn = path.join(self.settings["DOWNLOAD_FILE_FOLDER"], str(level), fileName)
             self.create_path_if_not_exist(fn)
             if not path.exists(fn):
                 with open(fn, "w") as f:
                     f.write(response.body)
     
+    def get_clean_file_name(self, level, response):
+        """
+        generate unique linkedin id, now use the url
+        """
+        url = response.url
+        if level in [1,2,3]:
+            return url.split("/")[-1]
+        
+        find_index = url.find("/pub/")
+        if find_index >= 0:
+            return url[find_index + 5:].replace('/', '-')
+        return None
+        
     def get_follow_links(self, level, hxs):
         if level in [1, 2, 3]:
             relative_urls = hxs.select("//ul[@class='directory']/li/a/@href").extract()
