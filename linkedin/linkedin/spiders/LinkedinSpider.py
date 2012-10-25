@@ -121,4 +121,8 @@ class LinkedinspiderSpider(CrawlSpider):
         if not path.exists(path.dirname(filePath)):
             os.makedirs(path.dirname(filePath))
             
-    def get_profile_from_search_page(self, response):
+    def get_profile_from_search_page(self, hxs):
+        relative_urls = hxs.select("//ol[@id='result-set']/li/div/a/@href").extract();
+        relative_urls = ["http://linkedin.com" + x for x in relative_urls]
+        return relative_urls
+        
