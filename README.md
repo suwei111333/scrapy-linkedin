@@ -7,13 +7,14 @@ Using Scrapy to get Linkedin's person public profile.
 * Get all **public** profile
 * Using Scrapy
 * Enable auto throttle
-* Ebable naive proxy providing
+* Enable naive proxy providing
+* agent rotating
 * ...
 
 ### todo
-* Support Unicode
-* improve availablity
-* improve speed
+* **Using MongoDB/Mysql as Backend**
+* **Improve speed**
+* **Support Unicode**
+* **Improve availablity**
 * add ajax load support
-* agent rotating
 * more complex proxy providing algorithm
