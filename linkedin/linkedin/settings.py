@@ -19,14 +19,14 @@ DOWNLOADER_MIDDLEWARES = {
 
 ########### Item pipeline
 ITEM_PIPELINES = [
-#                  "linkedin.piplines.MongoDBPipeline",
+                  "linkedin.pipelines.MongoDBPipeline",
 ]
 
-#MONGODB_SERVER = 'localhost'
-#MONGODB_PORT = 27017
-#MONGODB_DB = 'scrapy'
-#MONGODB_COLLECTION = 'items'
-#MONGODB_UNIQ_KEY = 'url'
+MONGODB_SERVER = 'localhost'
+MONGODB_PORT = 27017
+MONGODB_DB = 'scrapy'
+MONGODB_COLLECTION = 'person_profiles'
+MONGODB_UNIQ_KEY = '_id'
 ###########
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

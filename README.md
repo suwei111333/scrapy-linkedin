@@ -8,13 +8,13 @@ Using Scrapy to get Linkedin's person public profile.
 * Using Scrapy
 * Enable auto throttle
 * Enable naive proxy providing
-* agent rotating
+* Agent rotating
+* Support Unicode
 * ...
 
 ### todo
 * **Using MongoDB/Mysql as Backend**
 * **Improve speed**
-* **Support Unicode**
 * **Improve availablity**
 * add ajax load support
 * more complex proxy providing algorithm
@@ -23,3 +23,4 @@ Using Scrapy to get Linkedin's person public profile.
 ### Dependency
 * Scrapy == 0.16
 * pymongo 
+* BeautifulSoup, UnicodeDammit

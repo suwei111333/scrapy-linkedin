@@ -3,10 +3,12 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.http import Request
 from scrapy import log
-from linkedin.items import LinkedinItem
+from linkedin.items import LinkedinItem, PersonProfileItem
 from os import path
-
+from linkedin.parser.HtmlParser import HtmlParser
 import os
+import urllib
+from bs4 import UnicodeDammit
 
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
@@ -50,13 +52,20 @@ class LinkedinspiderSpider(CrawlSpider):
         """
         hxs = HtmlXPathSelector(response)
         index_level = self.determine_level(response)
-        if index_level in [1, 2, 3, 4, 5]:
-            # get second level urls to crawl
+        if index_level in [1, 2, 3, 4]:
             self.save_to_file_system(index_level, response)
             relative_urls = self.get_follow_links(index_level, hxs)
             if relative_urls is not None:
                 for url in relative_urls:
                     yield Request(url, callback=self.parse)
+        elif index_level == 5:
+            personProfile = HtmlParser.extract_person_profile(hxs)
+            linkedin_id = self.get_linkedin_id(response.url)
+            linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
+            if linkedin_id:
+                personProfile['_id'] = linkedin_id
+                personProfile['url'] = UnicodeDammit(response.url).markup
+                yield personProfile
     
     def determine_level(self, response):
         """
@@ -106,9 +115,15 @@ class LinkedinspiderSpider(CrawlSpider):
         if level in [1, 2, 3]:
             return url.split("/")[-1]
         
+        linkedin_id = self.get_linkedin_id(url)
+        if linkedin_id:
+            return linkedin_id
+        return None
+        
+    def get_linkedin_id(self, url):
         find_index = url.find("linkedin.com/")
         if find_index >= 0:
-            return url[find_index + 13:].replace('/', '-') + ".html"
+            return url[find_index + 13:].replace('/', '-')
         return None
         
     def get_follow_links(self, level, hxs):
