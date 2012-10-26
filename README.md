@@ -18,3 +18,8 @@ Using Scrapy to get Linkedin's person public profile.
 * **Improve availablity**
 * add ajax load support
 * more complex proxy providing algorithm
+
+
+### Dependency
+* Scrapy == 0.16
+* pymongo 

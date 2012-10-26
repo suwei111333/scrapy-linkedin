@@ -17,6 +17,18 @@ DOWNLOADER_MIDDLEWARES = {
     'linkedin.middleware.CustomUserAgentMiddleware': 545,
 }
 
+########### Item pipeline
+ITEM_PIPELINES = [
+#                  "linkedin.piplines.MongoDBPipeline",
+]
+
+#MONGODB_SERVER = 'localhost'
+#MONGODB_PORT = 27017
+#MONGODB_DB = 'scrapy'
+#MONGODB_COLLECTION = 'items'
+#MONGODB_UNIQ_KEY = 'url'
+###########
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'linkedin (+http://www.yourdomain.com)'
 
