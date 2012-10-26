@@ -15,3 +15,5 @@ class PersonProfileItem(Item):
     _id = Field()
     url = Field()
     name = Field()
+    also_view = Field()
+    education = Field()
