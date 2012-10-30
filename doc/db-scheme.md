@@ -17,6 +17,11 @@ Mongodb Scheme(**draft**)
 					'machine learning'
 				],
 				
+		specilities:
+				[
+					'data mining',
+				],
+				
 		interests:
 				[
 					'data mining',
@@ -24,10 +29,13 @@ Mongodb Scheme(**draft**)
 				],
 				
 		groups:
-				[
-					'acm',
-					'ieee'
-				],
+				{
+					'member',
+					'affiliation':
+								[
+									'kdd 2012'
+								]
+				}
 				
 		honors:
 				[
@@ -37,8 +45,9 @@ Mongodb Scheme(**draft**)
 		education:
 				[
 					{
-						school_name: 'a'
-						period: '1991-2012'
+						school_name: 'a',
+						period: '1991-2012',
+						desc:'topic model'
 					},
 				],
 				

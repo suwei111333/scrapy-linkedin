@@ -10,10 +10,10 @@ Using Scrapy to get Linkedin's person public profile.
 * Enable naive proxy providing
 * Agent rotating
 * Support Unicode
+* Using MongoDB as Backend
 * ...
 
 ### todo
-* **Using MongoDB/Mysql as Backend**
 * **Improve speed**
 * **Improve availablity**
 * add ajax load support
