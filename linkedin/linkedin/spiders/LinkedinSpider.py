@@ -50,6 +50,7 @@ class LinkedinspiderSpider(CrawlSpider):
         """
         default parse method, rule is not useful now
         """
+        response = response.replace(url=HtmlParser.remove_url_parameter(response.url))
         hxs = HtmlXPathSelector(response)
         index_level = self.determine_level(response)
         if index_level in [1, 2, 3, 4]:
