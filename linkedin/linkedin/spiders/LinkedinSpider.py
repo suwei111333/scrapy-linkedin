@@ -14,6 +14,10 @@ class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
     allowed_domains = ['linkedin.com']
     start_urls = [
+                  "http://cn.linkedin.com/in/jietangtsinghua", 
+                 ]
+                 
+    start_urls1 = [
                   "http://www.linkedin.com/directory/people/a.html",
                   "http://www.linkedin.com/directory/people/b.html",
                   "http://www.linkedin.com/directory/people/c.html",
@@ -45,8 +49,39 @@ class LinkedinspiderSpider(CrawlSpider):
     rules = (
         #Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
     )
-
+    
     def parse(self, response):
+        hxs = HtmlXPathSelector(response)
+        links = self.get_also_viewed_links(hxs)
+        requests = []
+        requests.extend([Request(link, callback = self.parse) for link in links])
+        personProfile = HtmlParser.extract_person_profile(hxs)
+        linkedin_id = self.get_linkedin_id(response.url)
+        linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
+        if linkedin_id:
+            personProfile['_id'] = linkedin_id
+            personProfile['url'] = UnicodeDammit(response.url).markup
+            requests.append(personProfile)
+        return requests
+            
+    def parse_page(self, response):
+        hxs = HtmlXPathSelector(response)
+        personProfile = HtmlParser.extract_person_profile(hxs)
+        linkedin_id = self.get_linkedin_id(response.url)
+        linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
+        if linkedin_id:
+            personProfile['_id'] = linkedin_id
+            personProfile['url'] = UnicodeDammit(response.url).markup
+            yield personProfile
+        
+        
+        
+    def get_also_viewed_links(self, hxs):
+        links = hxs.select("//div[@class='content']/ul/li/strong/a/@href").extract()
+        links = [link.split('?')[0] for link in links]
+        return links
+
+    def parse1(self, response):
         """
         default parse method, rule is not useful now
         """
@@ -132,7 +167,7 @@ class LinkedinspiderSpider(CrawlSpider):
             relative_urls = ["http://linkedin.com" + x for x in relative_urls]
             return relative_urls
         elif level == 4:
-            relative_urls = relative_urls = hxs.select("//ol[@id='result-set']/li/h2/strong/a/@href").extract()
+            relative_urls = hxs.select("//ol[@id='result-set']/li/h2/strong/a/@href").extract()
             relative_urls = ["http://linkedin.com" + x for x in relative_urls]
             return relative_urls
 
