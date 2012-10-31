@@ -9,52 +9,26 @@ from linkedin.parser.HtmlParser import HtmlParser
 import os
 import urllib
 from bs4 import UnicodeDammit
+from linkedin.db import MongoDBClient
 
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
     allowed_domains = ['linkedin.com']
+
     start_urls = [
-                  "http://cn.linkedin.com/in/jietangtsinghua", 
+                  "http://cn.linkedin.com/in/jietangtsinghua",
                  ]
                  
-    start_urls1 = [
-                  "http://www.linkedin.com/directory/people/a.html",
-                  "http://www.linkedin.com/directory/people/b.html",
-                  "http://www.linkedin.com/directory/people/c.html",
-                  "http://www.linkedin.com/directory/people/d.html",
-                  "http://www.linkedin.com/directory/people/e.html",
-                  "http://www.linkedin.com/directory/people/f.html",
-                  "http://www.linkedin.com/directory/people/g.html",
-                  "http://www.linkedin.com/directory/people/h.html",
-                  "http://www.linkedin.com/directory/people/i.html",
-                  "http://www.linkedin.com/directory/people/j.html",
-                  "http://www.linkedin.com/directory/people/k.html",
-                  "http://www.linkedin.com/directory/people/l.html",
-                  "http://www.linkedin.com/directory/people/m.html",
-                  "http://www.linkedin.com/directory/people/n.html",
-                  "http://www.linkedin.com/directory/people/o.html",
-                  "http://www.linkedin.com/directory/people/p.html",
-                  "http://www.linkedin.com/directory/people/q.html",
-                  "http://www.linkedin.com/directory/people/r.html",
-                  "http://www.linkedin.com/directory/people/s.html",
-                  "http://www.linkedin.com/directory/people/t.html",
-                  "http://www.linkedin.com/directory/people/u.html",
-                  "http://www.linkedin.com/directory/people/v.html",
-                  "http://www.linkedin.com/directory/people/w.html",
-                  "http://www.linkedin.com/directory/people/x.html",
-                  "http://www.linkedin.com/directory/people/y.html",
-                  "http://www.linkedin.com/directory/people/z.html"
-                  ]
 
     rules = (
         #Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
     )
-    
+
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
         links = self.get_also_viewed_links(hxs)
         requests = []
-        requests.extend([Request(link, callback = self.parse) for link in links])
+        requests.extend([Request(link, callback=self.parse) for link in links])
         personProfile = HtmlParser.extract_person_profile(hxs)
         linkedin_id = self.get_linkedin_id(response.url)
         linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
@@ -85,6 +59,7 @@ class LinkedinspiderSpider(CrawlSpider):
         """
         default parse method, rule is not useful now
         """
+        response = response.replace(url=HtmlParser.remove_url_parameter(response.url))
         hxs = HtmlXPathSelector(response)
         index_level = self.determine_level(response)
         if index_level in [1, 2, 3, 4]:
