@@ -1,6 +1,8 @@
 from linkedin.items import PersonProfileItem
 from bs4 import UnicodeDammit
+from w3lib.url import url_query_cleaner
 import random
+
 
 class HtmlParser:    
     @staticmethod
@@ -166,8 +168,7 @@ class HtmlParser:
         
     @staticmethod
     def remove_url_parameter(url):
-        url = url.rsplit("?", 1)
-        return url[0]
+        return url_query_cleaner(url)
     
     @staticmethod
     def get_linkedin_id(url):
