@@ -9,3 +9,7 @@ task :start_with_resume, :job_name do |t, args|
     end
     system "scrapy crawl LinkedinSpider -s JOBDIR=crawl_jobs/#{args.job_name}"
 end
+
+task :reload_proxy do
+    system 'python reload_proxy.py'
+end
