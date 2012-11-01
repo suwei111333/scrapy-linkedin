@@ -24,3 +24,9 @@ Using Scrapy to get Linkedin's person public profile.
 * Scrapy == 0.16
 * pymongo 
 * BeautifulSoup, UnicodeDammit
+
+
+### DB setup
+Just start <code>mongod</code>
+
+
