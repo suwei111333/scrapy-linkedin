@@ -12,11 +12,10 @@ class MongoDBClient(object):
     def get_collection(self):
         return self.collection
     
-    def walk(self):
+    def _walk(self):
         """
-        return all the documents in this collection
+        generator of all the documents in this collection
         """
-        docs = []
         skip = 0
         limit = 1000
         hasMore = True
@@ -24,8 +23,15 @@ class MongoDBClient(object):
             res = self.collection.find(skip=skip, limit=limit)
             hasMore = (res.count(with_limit_and_skip=True) == limit)
             for x in res:
-                docs.append(x)
+                yield x
             skip += limit
-        return docs
         
+    def walk(self):
+        """
+        return all the documents in this collection
+        """
+        docs = []
+        for doc in self._walk():
+            docs.append(doc)
+        return docs
     
