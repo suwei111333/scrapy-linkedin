@@ -41,7 +41,6 @@ class LinkedinspiderSpider(CrawlSpider):
                 % (first_name.strip(), last_name.strip())))
     
     def parse(self, response):
-        response = response.replace(url=HtmlParser.remove_url_parameter(response.url))
         hxs = HtmlXPathSelector(response)
         html_type = self.detect_response_type(response)
         if html_type == 1:
@@ -58,7 +57,7 @@ class LinkedinspiderSpider(CrawlSpider):
                 linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
                 if linkedin_id:
                     personProfile['_id'] = linkedin_id
-                    personProfile['url'] = UnicodeDammit(response.url).markup
+                    personProfile['url'] = HtmlParser.remove_url_parameter(UnicodeDammit(response.url).markup)
                     yield personProfile
             else:
                 log.msg("Parse model error: %s" % response.url)
@@ -72,7 +71,7 @@ class LinkedinspiderSpider(CrawlSpider):
     def detect_response_type(self, response):
         import re
         url = response.url
-        if re.match(".+/pub/dir/.+", url):
+        if re.match(".+/pub/dir/.*", url):
             return 1
         elif re.match(".+/pub/.+", url):
             return 2
