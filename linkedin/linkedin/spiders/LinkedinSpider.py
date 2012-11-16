@@ -10,6 +10,7 @@ import os
 import urllib
 from bs4 import UnicodeDammit
 from linkedin.db import MongoDBClient
+from w3lib.url import safe_url_string
 
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
@@ -30,9 +31,15 @@ class LinkedinspiderSpider(CrawlSpider):
 
         link: http://www.linkedin.com/pub/dir/?first=%22hang%22&last=%22li%22&search=Search
         """
-        # TODO: get search names from mongod and generate start urls
-        pass
+        self.person_name_client = MongoDBClient("person_names")
+        names = self.person_name_client.walk()
+        self.start_urls = [self.generate_search_url(x['firstname'], x['lastname']) 
+                           for x in names]
         
+    def generate_search_url(self, first_name, last_name):
+        return safe_url_string(("http://www.linkedin.com/pub/dir/?first=\"%s\"&last=\"%s\"&search=Search" 
+                % (first_name, last_name)))
+    
     def parse(self, response):
         response = response.replace(url=HtmlParser.remove_url_parameter(response.url))
         hxs = HtmlXPathSelector(response)
