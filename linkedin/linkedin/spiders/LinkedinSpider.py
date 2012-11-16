@@ -38,7 +38,7 @@ class LinkedinspiderSpider(CrawlSpider):
         
     def generate_search_url(self, first_name, last_name):
         return safe_url_string(("http://www.linkedin.com/pub/dir/?first=\"%s\"&last=\"%s\"&search=Search" 
-                % (first_name, last_name)))
+                % (first_name.strip(), last_name.strip())))
     
     def parse(self, response):
         response = response.replace(url=HtmlParser.remove_url_parameter(response.url))
@@ -53,12 +53,15 @@ class LinkedinspiderSpider(CrawlSpider):
         elif html_type == 2:
             # profile page
             personProfile = HtmlParser.extract_person_profile(hxs)
-            linkedin_id = self.get_linkedin_id(response.url)
-            linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
-            if linkedin_id:
-                personProfile['_id'] = linkedin_id
-                personProfile['url'] = UnicodeDammit(response.url).markup
-                yield personProfile
+            if personProfile:
+                linkedin_id = self.get_linkedin_id(response.url)
+                linkedin_id = UnicodeDammit(urllib.unquote_plus(linkedin_id)).markup
+                if linkedin_id:
+                    personProfile['_id'] = linkedin_id
+                    personProfile['url'] = UnicodeDammit(response.url).markup
+                    yield personProfile
+            else:
+                log.msg("Parse model error: %s" % response.url)
         else:
             # error
             log.msg("Abnormal url: %s" % response.url, log.CRITICAL)
