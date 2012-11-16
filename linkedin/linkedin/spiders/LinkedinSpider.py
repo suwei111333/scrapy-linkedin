@@ -37,7 +37,7 @@ class LinkedinspiderSpider(CrawlSpider):
                            for x in names]
         
     def generate_search_url(self, first_name, last_name):
-        return safe_url_string(("http://www.linkedin.com/pub/dir/?first=\"%s\"&last=\"%s\"&search=Search" 
+        return safe_url_string(("http://www.linkedin.com/pub/dir/?first=%s&last=%s&search=Search" 
                 % (first_name.strip(), last_name.strip())))
     
     def parse(self, response):
