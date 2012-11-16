@@ -21,6 +21,15 @@ class LinkedinspiderSpider(CrawlSpider):
     )
 
     def __init__(self):
+        """
+        new approach to crawl
+        1. get top name from aminer
+        2. search in linkedin
+        3. parse result(if only 1 match, go to step 4)
+        4. normal profile page
+
+        link: http://www.linkedin.com/pub/dir/?first=%22hang%22&last=%22li%22&search=Search
+        """
         self.first_level_url_db_client = MongoDBClient("first_level_url")
         urls = self.first_level_url_db_client.walk()
         self.start_urls = [x['url'] for x in urls] 
