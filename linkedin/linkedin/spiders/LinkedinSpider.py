@@ -30,9 +30,8 @@ class LinkedinspiderSpider(CrawlSpider):
 
         link: http://www.linkedin.com/pub/dir/?first=%22hang%22&last=%22li%22&search=Search
         """
-        self.first_level_url_db_client = MongoDBClient("first_level_url")
-        urls = self.first_level_url_db_client.walk()
-        self.start_urls = [x['url'] for x in urls] 
+        # TODO: get search names from mongod and generate start urls
+        pass
         
     def parse(self, response):
         response = response.replace(url=HtmlParser.remove_url_parameter(response.url))
