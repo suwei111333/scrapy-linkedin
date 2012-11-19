@@ -37,6 +37,11 @@ class HtmlParser:
             if industry and len(industry) == 1:
                 personProfile['industry'] = industry[0].strip()
         
+        ## overview
+        overview = hxs.select("//dl[@id='overview']").extract()
+        if overview and len(overview) == 1:
+            personProfile['overview_html'] = overview[0]
+            
         ## summary
         summary = hxs.select("//div[@id='profile-summary']/div[@class='content']/p[contains(@class,'summary')]/text()").extract()
         if summary and len(summary) > 0:

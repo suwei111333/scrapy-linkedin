@@ -27,4 +27,5 @@ class PersonProfileItem(Item):
     honors = Field()
     education = Field()
     experience = Field()
+    overview_html = Field()
     
