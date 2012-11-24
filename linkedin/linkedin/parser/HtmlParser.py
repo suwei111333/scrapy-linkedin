@@ -2,6 +2,7 @@ from linkedin.items import PersonProfileItem
 from bs4 import UnicodeDammit
 from w3lib.url import url_query_cleaner
 import random
+import LinkedinParser
 
 
 class HtmlParser:    
@@ -41,6 +42,9 @@ class HtmlParser:
         overview = hxs.select("//dl[@id='overview']").extract()
         if overview and len(overview) == 1:
             personProfile['overview_html'] = overview[0]
+            homepage = LinkedinParser.parse_homepage(overview[0])
+            if homepage:
+                personProfile['homepage'] = homepage
             
         ## summary
         summary = hxs.select("//div[@id='profile-summary']/div[@class='content']/p[contains(@class,'summary')]/text()").extract()
