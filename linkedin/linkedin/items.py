@@ -28,4 +28,5 @@ class PersonProfileItem(Item):
     education = Field()
     experience = Field()
     overview_html = Field()
+    homepage = Field()
     
