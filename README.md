@@ -26,7 +26,18 @@ Using Scrapy to get Linkedin's person public profile.
 * BeautifulSoup, UnicodeDammit
 
 
-### DB setup
-Just start <code>mongod</code>
+### usage
+	1. start a MongoDB instance, `mongod`
+	2. run the crawler, `scrapy crawl LinkedinSpider`
+
+you may found `Rakefile` helpful.
 
 
+### configuration
+you can change MongoDB setting ang other things in `settings.py`. 
+
+### note
+if you just need whatever public profiles, there are better ways to do it. 
+check out these urls: http://www.linkedin.com/directory/people/[a-z].html
+
+Our strategy is following `also-view` links in public profile.
