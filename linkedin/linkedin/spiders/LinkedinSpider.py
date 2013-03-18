@@ -8,22 +8,22 @@ from os import path
 from linkedin.parser.HtmlParser import HtmlParser
 import os
 import urllib
+import string
 from bs4 import UnicodeDammit
 from linkedin.db import MongoDBClient
 
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
     allowed_domains = ['linkedin.com']
-    start_urls = []
+    start_urls = [ "http://www.linkedin.com/directory/people/%s.html" % s 
+                   for s in "abcdefghijklmnopqrstuvwxyz" ]
 
     rules = (
         #Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
     )
 
     def __init__(self):
-        self.first_level_url_db_client = MongoDBClient("first_level_url")
-        urls = self.first_level_url_db_client.walk()
-        self.start_urls = [x['url'] for x in urls] 
+        pass
         
     def parse(self, response):
         """
