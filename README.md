@@ -13,12 +13,6 @@ Using Scrapy to get Linkedin's person public profile.
 * Using MongoDB as Backend
 * ...
 
-### todo
-* **Improve speed**
-* **Improve availablity**
-* add ajax load support
-* more complex proxy providing algorithm
-
 
 ### Dependency
 * Scrapy == 0.16
@@ -41,3 +35,7 @@ if you just need whatever public profiles, there are better ways to do it.
 check out these urls: http://www.linkedin.com/directory/people/[a-z].html
 
 Our strategy is following `also-view` links in public profile.
+
+### One more thing
+This is a toy project a few years ago. Now I won't maintain it anymore, questions about this project will be ignored. You can read the code, there isn't much. 
+I hope this project can help you get a basic understanding of Scrapy, then you can make your own Spider. 
