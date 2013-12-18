@@ -58,13 +58,13 @@ class LinkedinspiderSpider(CrawlSpider):
         """
         import re
         url = response.url
-        if re.match(".+/[a-z]\.html", url):
+        if re.match(".+/people-\w$", url):
             return 1
-        elif re.match(".+/[A-Z]\d+.html", url):
+        elif re.match(".+/people-\w-\d{1,3}$", url):
             return 2
-        elif re.match(".+/people/[a-zA-Z0-9-]+.html", url):
+        elif re.match(".+/people-\w-\d{1,3}-\d{1,3}$", url):
             return 3
-        elif re.match(".+/pub/dir/.+", url):
+        elif re.match(".+/people-\w-\d{1,3}-\d{1,3}-\d{1,3}$", url):
             return 4
         elif re.match(".+/search/._", url):
             return 4
@@ -112,7 +112,7 @@ class LinkedinspiderSpider(CrawlSpider):
             relative_urls = ["http://linkedin.com" + x for x in relative_urls]
             return relative_urls
         elif level == 4:
-            relative_urls = relative_urls = hxs.select("//ol[@id='result-set']/li/h2/strong/a/@href").extract()
+            relative_urls = relative_urls = hxs.select("//*[@id='body']/div/ul[2]//a/@href").extract()
             relative_urls = ["http://linkedin.com" + x for x in relative_urls]
             return relative_urls
 
